@@ -1,39 +1,51 @@
 <template>
-  <main class="form-signin w-100 m-auto">
-    <form>
-      <img
-        class="mb-4"
-        src="/docs/5.3/assets/brand/bootstrap-logo.svg"
-        alt=""
-        width="72"
-        height="57"
-      />
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-      <div class="form-floating">
-        <input
-          type="email"
-          class="form-control"
-          id="floatingInput"
-          placeholder="name@example.com"
-        />
-        <label for="floatingInput">Email address</label>
+  <div class="card">
+    <div class="card-header">Yeni İş Ekle</div>
+    <div class="card-body">
+      <div class="row bg-white">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="title" class="form-label">Başlık</label>
+            <input type="text" class="form-control" id="title" />
+          </div>
+          <div class="mb-3">
+            <label for="date" class="form-label">Tarih</label>
+            <input type="date" class="form-control" id="date" />
+          </div>
+          <div class="mb-3">
+            <label for="tags" class="form-label">Etiketler</label>
+            <SelectTwo :settings="{ tags: true, multiple: true }"></SelectTwo>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="detail" class="form-label">Açıklama</label>
+            <ckeditor
+              :editor="editor"
+              v-model="editorData"
+              :config="editorConfig"
+            ></ckeditor>
+          </div>
+        </div>
       </div>
-      <div class="form-floating">
-        <input
-          type="password"
-          class="form-control"
-          id="floatingPassword"
-          placeholder="Password"
-        />
-        <label for="floatingPassword">Password</label>
-      </div>
-
-      <div class="checkbox mb-3">
-        <label> <input type="checkbox" value="remember-me" /> Remember me </label>
-      </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">© 2017–2022</p>
-    </form>
-  </main>
+    </div>
+    <div class="card-footer d-flex flex-row-reverse">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <router-link to="/" class="btn btn-secondary mx-1">Turn List</router-link>
+    </div>
+  </div>
 </template>
+<script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+export default {
+  data() {
+    return {
+      editor: ClassicEditor,
+      editorData: "<p>Content of the editor.</p>",
+      editorConfig: {
+        // The configuration of the editor.
+      },
+    };
+  },
+};
+</script>
