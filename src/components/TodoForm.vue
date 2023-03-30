@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="card-footer d-flex flex-row-reverse">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button @click="Save()" class="btn btn-primary">Save</button>
       <router-link to="/" class="btn btn-secondary mx-1">Turn List</router-link>
     </div>
   </div>
@@ -41,11 +41,26 @@ export default {
   data() {
     return {
       editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        // The configuration of the editor.
-      },
     };
+  },
+  methods: {
+    Save() {
+      /**
+        id
+        jobTitle
+        job
+        status
+        tags
+        date
+       */
+      alert("hi");
+    },
   },
 };
 </script>
+
+<style scoped>
+.ck-editor .ck-editor__main .ck-content {
+  min-height: 500px;
+}
+</style>
