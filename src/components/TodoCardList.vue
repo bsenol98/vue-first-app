@@ -3,9 +3,7 @@
     <!-- <div class="card-header"></div> -->
     <div class="card-body">
       <h2 class="card-title">{{ item.jobTitle }}</h2>
-      <p class="mb-5">
-        {{ item.job }}
-      </p>
+      <p class="mb-5" v-html="item.job"></p>
       <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center" style="font-size: 0.8rem">
           <i class="fa-solid fa-tag"></i>&nbsp;
@@ -13,7 +11,7 @@
             v-for="(tag, k) in item.tags"
             :key="k"
             class="badge rounded-pill bg-secondary text-white"
-            style="margin-right:2px;"
+            style="margin-right: 2px"
           >
             {{ tag }}
           </div>

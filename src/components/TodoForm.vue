@@ -6,15 +6,18 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label for="title" class="form-label">Başlık</label>
-            <input type="text" class="form-control" id="title" />
+            <input type="text" v-model="todo.jobTitle" class="form-control" id="title" />
           </div>
           <div class="mb-3">
             <label for="date" class="form-label">Tarih</label>
-            <input type="date" class="form-control" id="date" />
+            <input type="date" v-model="todo.date" class="form-control" id="date" />
           </div>
           <div class="mb-3">
             <label for="tags" class="form-label">Etiketler</label>
-            <SelectTwo :settings="{ tags: true, multiple: true }"></SelectTwo>
+            <SelectTwo
+              v-model="todo.tags"
+              :settings="{ tags: true, multiple: true }"
+            ></SelectTwo>
           </div>
         </div>
         <div class="col-md-6">
@@ -22,7 +25,7 @@
             <label for="detail" class="form-label">Açıklama</label>
             <ckeditor
               :editor="editor"
-              v-model="editorData"
+              v-model="todo.job"
               :config="editorConfig"
             ></ckeditor>
           </div>
@@ -36,24 +39,29 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
+      todo: {
+        jobTitle: "",
+        job: "",
+        status: 1,
+        tags: [],
+        date: "",
+      },
       editor: ClassicEditor,
     };
   },
   methods: {
     Save() {
-      /**
-        id
-        jobTitle
-        job
-        status
-        tags
-        date
-       */
-      alert("hi");
+      const url = "http://localhost:8080/todo.json";
+      axios.post(url, this.todo).then((r) => {
+        console.log("response", r);
+      });
+      // console.log("todo", this.todo);
+      // alert("hi");
     },
   },
 };

@@ -29,25 +29,25 @@
       </div>
     </div>
 
-    <div class="col-md-12 mt-4 d-none d-sm-block">
+    <!-- <div class="col-md-12 mt-4 d-none d-sm-block">
       <div class="bg-white">
         <list-table />
       </div>
-    </div>
-    <div class="col-md-12 mt-4 d-block d-sm-none">
-      <div class="bg-white">
-        <list-card v-for="item in toDoList" :key="item" :item="item"></list-card>
+    </div> -->
+    <div class="col-md-12 mt-4">
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="item in toDoList" :key="item">
+          <list-card :item="item" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import ListTable from "@/components/TodoTableList.vue";
 import ListCard from "@/components/TodoCardList.vue";
-
+import axios from "axios";
 export default {
   components: {
-    listTable: ListTable,
     listCard: ListCard,
   },
   provide() {
@@ -57,18 +57,19 @@ export default {
       },
     };
   },
+  mounted() {
+    const url = "http://localhost:8080/todo.json";
+    axios.get(url, this.todo).then((r) => {
+      const data = [];
+      for (const key in r.data) {
+        data.push({ ...r.data[key], id: key });
+      }
+      this.toDoList = data;
+    });
+  },
   data() {
     return {
-      toDoList: [
-        {
-          id: 1,
-          jobTitle:"Vue Öğren",
-          job: "Vue öğreniyorum...",
-          status: 1,
-          tags: ["webSite","PHP","NODEJS"],
-          date: "2023-03-30T22:43",
-        },
-      ],
+      toDoList: []
     };
   },
 };

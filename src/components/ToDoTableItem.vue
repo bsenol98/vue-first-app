@@ -1,12 +1,12 @@
 <template>
   <tr>
     <td class="text-center">{{item}}</td>
-    <td>Torbali Web site geliştirilcek...</td>
+    <td>Vue Öğreniyorum...</td>
     <td class="text-center">
       <div class="badge rounded-pill bg-warning text-dark">Waiting</div>
     </td>
     <td class="text-center">
-      <div class="badge rounded-pill bg-secondary text-white">torBLD</div>
+      <div class="badge rounded-pill bg-secondary text-white">Vue</div>
     </td>
     <td class="text-center">18.03.2023</td>
     <td class="text-center">
