@@ -41,6 +41,7 @@
         </div>
       </div>
     </div>
+    {{ JSON.stringify(this.err) }}
   </div>
 </template>
 <script>
@@ -59,17 +60,23 @@ export default {
   },
   mounted() {
     const url = "http://localhost:8080/todo.json";
-    axios.get(url, this.todo).then((r) => {
-      const data = [];
-      for (const key in r.data) {
-        data.push({ ...r.data[key], id: key });
-      }
-      this.toDoList = data;
-    });
+    axios
+      .get(url, this.todo)
+      .then((r) => {
+        const data = [];
+        for (const key in r.data) {
+          data.push({ ...r.data[key], id: key });
+        }
+        this.toDoList = data;
+      })
+      .catch((err) => {
+        this.err = err;
+      });
   },
   data() {
     return {
-      toDoList: []
+      toDoList: [],
+      err: "",
     };
   },
 };

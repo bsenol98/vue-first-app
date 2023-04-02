@@ -43,10 +43,15 @@
             <li><a class="dropdown-item" href="#">Complete</a></li>
             <li><a class="dropdown-item" href="#">Wait</a></li>
           </ul>
-          <div class="btn btn-warning btn-sm">
+          <router-link
+            :to="{ path: `/update-to-do/${item.id}` }"
+            class="btn btn-warning btn-sm"
+          >
             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+          </router-link>
+          <div @click="todoDelete(item.id)" class="btn btn-danger btn-sm">
+            <i class="fa-solid fa-trash"></i>
           </div>
-          <div class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></div>
         </div>
       </span>
     </div>
@@ -54,6 +59,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: ["item"],
   data() {
@@ -73,6 +80,12 @@ export default {
             3: { class: "bg-success text-white", text: "Completed" },
           }[status]
         : { class: "secondary", text: "undefined" };
+    },
+    todoDelete(id) {
+      if (confirm("Silmek istediğinize emin misiniz?")) {
+        const url = `http://localhost:8080/todo/${id}.json`;
+        axios.delete(url).then((r) => console.log("result", r));
+      }
     },
   },
   created() {

@@ -7,6 +7,9 @@ const routes = [
     }, {
         "path": "/add-to-do",
         "component": () => import("@/components/TodoForm")
+    }, {
+        "path": "/update-to-do/:id",
+        "component": () => import("@/components/TodoForm")
     }
 ];
 

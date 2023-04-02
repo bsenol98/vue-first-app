@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div v-if="undefinedTodo === false" class="card">
     <div class="card-header">Yeni İş Ekle</div>
     <div class="card-body">
       <div class="row bg-white">
@@ -17,6 +17,7 @@
             <SelectTwo
               v-model="todo.tags"
               :settings="{ tags: true, multiple: true }"
+              :options="todo.tags"
             ></SelectTwo>
           </div>
         </div>
@@ -33,10 +34,18 @@
       </div>
     </div>
     <div class="card-footer d-flex flex-row-reverse">
-      <button @click="Save()" class="btn btn-primary">Save</button>
+      <button
+        v-if="this.todoIdForUpdate === false"
+        @click="Add()"
+        class="btn btn-primary"
+      >
+        Add
+      </button>
+      <button v-else @click="Save()" class="btn btn-primary">Save</button>
       <router-link to="/" class="btn btn-secondary mx-1">Turn List</router-link>
     </div>
   </div>
+  <div v-else class="alert alert-warning">Düzenlemek istediğiniz veri bulunamadı!</div>
 </template>
 <script>
 import axios from "axios";
@@ -44,6 +53,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
+      undefinedTodo: false,
+      todoIdForUpdate: false,
       todo: {
         jobTitle: "",
         job: "",
@@ -55,14 +66,28 @@ export default {
     };
   },
   methods: {
-    Save() {
+    Add() {
       const url = "http://localhost:8080/todo.json";
       axios.post(url, this.todo).then((r) => {
         console.log("response", r);
       });
-      // console.log("todo", this.todo);
-      // alert("hi");
     },
+    Save() {
+      const url = `http://localhost:8080/todo/${this.todoIdForUpdate}.json`;
+      axios.put(url, this.todo).then(() => this.$router.push({ path: "/" }));
+    },
+  },
+  mounted() {
+    this.todoIdForUpdate = this.$route.params?.id;
+    if (typeof this.todoIdForUpdate != "undefined") {
+      const url = `http://localhost:8080/todo/${this.todoIdForUpdate}.json`;
+      axios.get(url).then((r) => {
+        if (r.data === null) return (this.undefinedTodo = true);
+        this.todo = r.data;
+      });
+    } else {
+      this.todoIdForUpdate = false;
+    }
   },
 };
 </script>
