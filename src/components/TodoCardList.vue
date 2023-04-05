@@ -1,9 +1,12 @@
 <template>
-  <div class="card">
+  <div class="card" v-if="visible">
     <!-- <div class="card-header"></div> -->
     <div class="card-body">
       <h2 class="card-title">{{ item.jobTitle }}</h2>
-      <p class="mb-5" v-html="item.job"></p>
+      <p
+        style="min-height: 60px; max-height: 100px; overflow-y: auto"
+        v-html="item.job"
+      ></p>
       <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center" style="font-size: 0.8rem">
           <i class="fa-solid fa-tag"></i>&nbsp;
@@ -40,8 +43,19 @@
             <i class="fa-solid fa-gear"></i>
           </button>
           <ul class="dropdown-menu" aria-labelledby="todoStatus">
-            <li><a class="dropdown-item" href="#">Complete</a></li>
-            <li><a class="dropdown-item" href="#">Wait</a></li>
+            <li>
+              <a class="dropdown-item" href="#" @click="changeStatus(item, 1)"> Wait</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" @click="changeStatus(item, 2)">
+                Processing
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" @click="changeStatus(item, 3)">
+                Complete
+              </a>
+            </li>
           </ul>
           <router-link
             :to="{ path: `/update-to-do/${item.id}` }"
@@ -65,6 +79,7 @@ export default {
   props: ["item"],
   data() {
     return {
+      visible: true,
       status: {
         class: "",
         text: "",
@@ -84,8 +99,19 @@ export default {
     todoDelete(id) {
       if (confirm("Silmek istediğinize emin misiniz?")) {
         const url = `http://localhost:8080/todo/${id}.json`;
-        axios.delete(url).then((r) => console.log("result", r));
+        axios.delete(url).then((r) => {
+          console.log("result", r);
+          this.visible = false;
+        });
       }
+    },
+    changeStatus(item, status) {
+      const changedTodo = { ...item, status: status };
+      const url = `http://localhost:8080/todo/${changedTodo.id}.json`;
+      delete changedTodo["id"];
+      axios.put(url, changedTodo).then(() => {
+        this.status = this.getStatus(status);
+      });
     },
   },
   created() {

@@ -84,6 +84,7 @@ export default {
       axios.get(url).then((r) => {
         if (r.data === null) return (this.undefinedTodo = true);
         this.todo = r.data;
+        console.log("Finded Todo =>", r.data);
       });
     } else {
       this.todoIdForUpdate = false;
