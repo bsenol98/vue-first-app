@@ -20,9 +20,14 @@
             <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">All</a></li>
-            <li><a class="dropdown-item" href="#">Completed</a></li>
-            <li><a class="dropdown-item" href="#">Waiting</a></li>
+            <li><a class="dropdown-item" href="#" @click="getTodoList()">All</a></li>
+            <li><a class="dropdown-item" href="#" @click="getTodoList(1)">Waiting</a></li>
+            <li>
+              <a class="dropdown-item" href="#" @click="getTodoList(2)">Processing</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" @click="getTodoList(3)">Completed</a>
+            </li>
           </ul>
           <div class="btn-group"></div>
         </div>
@@ -51,6 +56,12 @@ export default {
   components: {
     listCard: ListCard,
   },
+  data() {
+    return {
+      toDoList: [],
+      err: "",
+    };
+  },
   provide() {
     return {
       provideData: {
@@ -58,26 +69,29 @@ export default {
       },
     };
   },
-  mounted() {
-    const url = "http://localhost:8080/todo.json";
-    axios
-      .get(url, this.todo)
-      .then((r) => {
-        const data = [];
-        for (const key in r.data) {
-          data.push({ ...r.data[key], id: key });
-        }
-        this.toDoList = data;
-      })
-      .catch((err) => {
-        this.err = err;
-      });
+  methods: {
+    getTodoList(status = -1) {
+      const url = "http://localhost:8080/todo.json";
+      axios
+        .get(url)
+        .then((r) => {
+          const data = [];
+          for (const key in r.data) {
+            data.push({ ...r.data[key], id: key });
+          }
+          if (status === -1) {
+            this.toDoList = data;
+          } else {
+            this.toDoList = data.filter((item) => item.status == status);
+          }
+        })
+        .catch((err) => {
+          this.err = err;
+        });
+    },
   },
-  data() {
-    return {
-      toDoList: [],
-      err: "",
-    };
+  mounted() {
+    this.getTodoList();
   },
 };
 </script>
