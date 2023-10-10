@@ -1,4 +1,4 @@
-# to-do-list
+# to-do-list (VUE-JS & FIREBASE)
 
 ## Project setup
 ```
